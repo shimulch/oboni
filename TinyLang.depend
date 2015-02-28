@@ -1,0 +1,119 @@
+# depslib dependency file v1.0
+1424860351 source:e:\compiler\tinylang\main.c
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+	<string.h>
+	"global_things.h"
+	"grammer.h"
+	"error_report.h"
+	"lexer.h"
+	"writer.h"
+	"parser.h"
+
+1424798256 e:\compiler\tinylang\grammer.h
+
+1425061815 e:\compiler\tinylang\error_report.h
+	"global_things.h"
+
+1425134759 e:\compiler\tinylang\global_things.h
+	"grammer.h"
+
+1425134882 source:e:\compiler\tinylang\global_things.c
+	<stdlib.h>
+	<ctype.h>
+	<string.h>
+	"global_things.h"
+	"error_report.h"
+
+1425061945 source:e:\compiler\tinylang\error_report.c
+	<stdio.h>
+	<stdlib.h>
+	"error_report.h"
+
+1425134327 source:e:\compiler\tinylang\lexer.c
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+	<string.h>
+	"lexer.h"
+	"error_report.h"
+	"global_things.h"
+	"fsm.h"
+
+1425061455 e:\compiler\tinylang\lexer.h
+	<stdio.h>
+	<stdlib.h>
+	"grammer.h"
+	"global_things.h"
+
+1424769792 source:\\shimul-pc\e\compiler\tinylang\error_report.c
+	<stdio.h>
+	<stdlib.h>
+	"error_report.h"
+
+1424769767 \\shimul-pc\e\compiler\tinylang\error_report.h
+
+1424781835 source:\\shimul-pc\e\compiler\tinylang\global_things.c
+	<stdlib.h>
+	"global_things.h"
+
+1424781842 \\shimul-pc\e\compiler\tinylang\global_things.h
+	"grammer.h"
+
+1424777068 \\shimul-pc\e\compiler\tinylang\grammer.h
+
+1424781161 source:\\shimul-pc\e\compiler\tinylang\main.c
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+	<string.h>
+	"global_things.h"
+	"grammer.h"
+	"error_report.h"
+	"lexer.h"
+
+1424783711 \\shimul-pc\e\compiler\tinylang\lexer.h
+	<stdio.h>
+	<stdlib.h>
+	"grammer.h"
+	"global_things.h"
+
+1424783618 source:\\shimul-pc\e\compiler\tinylang\lexer.c
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+	<string.h>
+	"lexer.h"
+	"error_report.h"
+	"global_things.h"
+
+1424797718 source:e:\compiler\tinylang\fsm.c
+	<ctype.h>
+	<string.h>
+	"fsm.h"
+
+1424790483 e:\compiler\tinylang\fsm.h
+
+1425134851 source:e:\compiler\tinylang\parser.c
+	"parser.h"
+	"global_things.h"
+	"error_report.h"
+	"writer.h"
+	<ctype.h>
+	<string.h>
+
+1425062125 e:\compiler\tinylang\parser.h
+
+1424860279 source:e:\compiler\tinylang\writer.c
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+	<string.h>
+	"writer.h"
+	"grammer.h"
+	"global_things.h"
+
+1424859725 e:\compiler\tinylang\writer.h
+	<stdio.h>
+

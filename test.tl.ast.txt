@@ -1,0 +1,16 @@
+E 
+E S 
+E S var 
+E S var id 
+E S var id x = nil 
+E S var id x = nil E' 
+E S var id x = nil E' E 
+E S var id x = nil E' E S 
+E S var id x = nil E' E S = 
+E S var id x = nil E' E S = id 
+E S var id x = nil E' E S = id x = nil 
+E S var id x = nil E' E S = id x = nil TERM 
+E S var id x = nil E' E S = id x = nil TERM num 
+E S var id x = nil E' E S = id x = nil TERM num 6 
+E S var id x = nil E' E S = id x = nil TERM num 6 E' 
+E S var id x = nil E' E S = id x = nil TERM num 6 E' END 
