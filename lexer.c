@@ -12,15 +12,18 @@ int total_tokens = 0;
 char chunk[MAXIMUM_COLUMN_SIZE] = "";
 int multiple_new_line = 0;
 int value_id = 0;
+
+int string_helper = 0;
+
 /*-------- READ SOURCE FILE AND TOKENIZE ----------------------*/
 void read_file(char* file_name){
     file_input_handler = fopen(file_name, "r");
     if(file_input_handler == NULL) show_error_and_exit(SOURCE_NOT_FOUND, 0);
 
     token_array_init(&token_array);
-    hash_table_init(&data_table);
 
     while(fgets(current_line, MAXIMUM_COLUMN_SIZE, file_input_handler) != NULL){
+
             tokenizer(current_line);
     }
 
@@ -37,6 +40,25 @@ void tokenizer(){
 
     while(x < len){
         char ch = current_line[x];
+
+        // string
+        if(!string_helper && ch == '"'){
+            add_token_chunk();
+            string_helper = 1;
+            x++;
+            continue;
+        }else if(string_helper && ch == '"'){
+
+            add_token(STRING);
+            strcpy(chunk, "");
+            string_helper = 0;
+            x++;
+            continue;
+        }else if(string_helper){
+            strncat(chunk,&ch, 1);
+            x++;
+            continue;
+        }
 
         int got_token = 0;
         if(ch == '\n') {
@@ -163,12 +185,16 @@ void tokenizer(){
         if(!got_token){
 
             strncat(chunk,&ch, 1);
-            //puts(chunk);
+
         }else{
             strcpy(chunk, "");
+            got_token = 0;
         }
 
         x++;
+    }
+    if(strlen(chunk)> 0){
+        add_token_chunk();
     }
 }
 
@@ -177,8 +203,11 @@ void tokenizer(){
 void add_token(TOKEN_TYPE token_type){
     TOKEN token;
     token.token_id = total_tokens++;
-    if(token_type == IDENTIFIER || token_type == NUMBER){
+    if(token_type == IDENTIFIER || token_type == NUMBER || token_type == STRING){
         token.value_id = value_id;
+        token.value = malloc(sizeof(token.value));
+        strcpy(token.value, chunk);
+
     }
     token.token_type = token_type;
     token_array_append(&token_array, token);
@@ -197,37 +226,32 @@ void add_token_chunk(){
     */
     if(strcmp(chunk, "var") == 0){
         add_token(VAR);
-        strcpy(chunk, "");
+
     }else if(strcmp(chunk, "if") == 0){
         add_token(IF);
-        strcpy(chunk, "");
+
     }else if(strcmp(chunk, "when") == 0){
         add_token(WHEN);
-        strcpy(chunk, "");
+
+    }else if(strcmp(chunk, "show") == 0){
+        add_token(SHOW);
+
     }else if(fsm_identifier_check(chunk, strlen(chunk))){
         add_token(IDENTIFIER);
-        add_value(IDENTIFIER);
-        strcpy(chunk, "");
+
     }else if(fsm_number_check(chunk, strlen(chunk))){
         add_token(NUMBER);
-        add_value(NUMBER);
-        strcpy(chunk, "");
-    }
 
+    }
+    strcpy(chunk, "");
 }
 
 
 
 void add_value(TOKEN_TYPE token_type) {
-    HASH_TABLE_DATA hash_table_value;
-
-    hash_table_value.type = IDENTIFIER;
-    strcpy(hash_table_value.value, chunk);
-    hash_table_append(&data_table, hash_table_value);
-    value_id++;
 
     if(token_type == IDENTIFIER){
-        identifier_bst_add(chunk, "nil");
+
     }
 
 }

@@ -1,9 +1,10 @@
 #include "parser.h"
 #include "global_things.h"
 #include "error_report.h"
-#include "writer.h"
+
 #include <ctype.h>
 #include <string.h>
+#include <stdlib.h>
 
 int current_token_index = 0, line_number = 1;
 TOKEN current_token;
@@ -12,10 +13,14 @@ int CURRENT_STATE = STATE_EXPRESSION;
 
 int open_cb = 0, open_p = 0;
 
+
 /*------------- CREATE ABSTRACT SYNTAX TREE ----------------*/
 void parse(){
+    global_current_scope = 0;
     get_next_token();
-    expression();
+
+    ast_root = expression();
+
 }
 
 
@@ -38,121 +43,151 @@ int is_last_token(){
  *                   | CONTROLFLOW EXPRESSION'
  *                   | EPSILON
  */
-void expression(){
-    // write me
-    write_syntax_tree("E ");
-    //printf("%d %d\n", current_token_type, open_cb);
-    if(current_token_type == RCB && open_cb > 0){
-            return;
-    }
+AST_NODE* expression(){
+
+
     // if statement
-    else if(current_token_type == VAR || current_token_type == ASSIGNMENT_OPERATOR){
-        statement();
-        expression_prime();
+    if(current_token_type == VAR || current_token_type == ASSIGNMENT_OPERATOR || current_token_type == SHOW){
+        AST_NODE* exp = create_ast_node(EXPRESSION);
+        exp->childs[0] = statement();
+        exp->childs[1] = expression_prime();
+        return exp;
     }
     // if a control flow
     else if(current_token_type == IF || current_token_type == WHEN){
-        control_flow();
-        expression_prime();
+        AST_NODE* exp = create_ast_node(EXPRESSION);
+        exp->childs[0] = control_flow();
+        exp->childs[1] = expression_prime();
+        return exp;
     }else{
         show_parser_error_and_exit(PARSER_ERROR_UNEXPECTED, line_number, VAR, current_token_type);
     }
+    return NULL;
 }
 
 
 /*
  * RULE: EXPRESSION' -> STATEMENT NEWLINE EXPRESSION
- *                   | CONTROLFLOW NEWLINE EXPRESSION
- *                   | STATEMENT
- *                   | CONTROLFLOW
- *                   | EPSILON
+ *                    | CONTROLFLOW NEWLINE EXPRESSION
+ *                    | STATEMENT
+ *                    | CONTROLFLOW
+ *                    | EPSILON
  */
 
-void expression_prime(){
+AST_NODE* expression_prime(){
     // write me
-    write_syntax_tree("E' ");
-    //printf("%d  %d\n",current_token.token_id, open_cb);
 
+    //printf("%d  %d\n",current_token.token_id, open_cb);
 
     if(current_token_type == NEWLINE && !is_last_token()){
         get_next_token();
         line_number++;
-        expression();
+        AST_NODE* exp_p = create_ast_node(EXPRESSION_PRIME);
+        if(current_token_type == RCB && open_cb > 0){
+            return NULL;
+        }
+        exp_p->childs[0] = expression();
+        return exp_p;
     }
     else if(current_token_type == NEWLINE && is_last_token()){
-        write_syntax_tree("END ");
+
     }
     else {
         show_parser_error_and_exit(PARSER_ERROR_EXPECTED, line_number, NEWLINE, current_token_type);
     }
+
+    return NULL;
 }
 
 /*
  * RULE: STATEMENT  -> var identifier
  *                   | assignment_operator identifier TERM
  */
-void statement(){
+AST_NODE* statement(){
 
-    // write me
-    write_syntax_tree("S ");
 
-    // if VARIABLE DECLARATION
     if(current_token_type == VAR){
-        var_t();
-        identifier_t();
+        AST_NODE* stmnt = create_ast_node(STATEMENT);
+        stmnt->childs[0] = var_t();
+        stmnt->childs[1] = identifier_t();
+        return stmnt;
     }
     // if ASSIGNMENT
     else if(current_token_type == ASSIGNMENT_OPERATOR){
-        write_syntax_tree("= ");
+
+        AST_NODE* stmnt = create_ast_node(STATEMENT);
+        stmnt->childs[0] = operator_t();
+        stmnt->childs[1] = identifier_t();
+        stmnt->childs[2] = term();
+        return stmnt;
+    }
+
+    // if SHOW
+    else if(current_token_type == SHOW){
+
+        AST_NODE* stmnt = create_ast_node(SHOW_METHOD);
         get_next_token();
-        identifier_t();
-        term();
-    }else {
+        stmnt->childs[1] = term();
+        return stmnt;
+    }
+    else {
         show_parser_error_and_exit(PARSER_ERROR_UNEXPECTED, line_number, VAR, current_token_type);
     }
+    return NULL;
 }
 
 /*
  * RULE: CONTROLFLOW -> if lp EVALUATION rp BLOCK
  *                    | when lp EVALUATION rp BLOCK
  */
-void control_flow(){
+AST_NODE* control_flow(){
     // write me
-    write_syntax_tree("CF ");
     // if IF found
     if(current_token_type == IF){
-        if_t();
+        AST_NODE* ctrl_flow = create_ast_node(CONTROL_FLOW);
+        ctrl_flow->childs[0] = if_t();
         lp_t();
-        evaluation();
+
+        ctrl_flow->childs[1] = evaluation();
         rp_t();
-        block();
+
+        ctrl_flow->childs[2] = block();
+        return ctrl_flow;
     }
     // if WHEN found
     else if(current_token_type == WHEN){
-        when_t();
+        AST_NODE* ctrl_flow = create_ast_node(CONTROL_FLOW);
+        ctrl_flow->childs[0] = when_t();
         lp_t();
-        evaluation();
+        ctrl_flow->childs[1] = evaluation();
         rp_t();
-        block();
+        ctrl_flow->childs[2] = block();
+
+        return ctrl_flow;
     }else{
         show_parser_error_and_exit(PARSER_ERROR_UNEXPECTED, line_number, IF, current_token_type);
     }
+    return NULL;
 }
 
 /*
  * RULE: BLOCK -> lcb EXPRESSION' rcb EXPRESSION'
  */
-void block(){
-    write_syntax_tree("BLC ");
+AST_NODE* block(){
+
     if(current_token_type == LCB){
         lcb_t();
-        expression_prime();
+        AST_NODE* blck = create_ast_node(BLOCK);
+
+        blck->childs[0] = expression_prime();
+
         rcb_t();
-        expression_prime();
+
+        return blck;
     }else {
         show_parser_error_and_exit(PARSER_ERROR_EXPECTED, line_number, LCB, current_token_type);
     }
-
+    return NULL;
 }
 
 /*-------------- IDENTIFIER -------------------------------*/
@@ -163,32 +198,39 @@ void block(){
  *              | number
  *              | lp EVALUATION rp
  */
-void term(){
+AST_NODE* term(){
     // write me
-    write_syntax_tree("TERM ");
 
     if(current_token_type == IDENTIFIER){
-        identifier_t();
+        return identifier_t();
     }else if(current_token_type == NUMBER){
-        number_t();
-    }else if(current_token_type == LP){
+        return number_t();
+    }
+    else if(current_token_type == STRING){
+        return string_t();
+    }
+    else if(current_token_type == LP){
         lp_t();
-        evaluation();
+        AST_NODE* eval = evaluation();
         rp_t();
+        return eval;
     }else{
         show_parser_error_and_exit(PARSER_ERROR_UNEXPECTED, line_number, IDENTIFIER, current_token_type);
     }
+
+    return NULL;
 }
 
 /*
  * RULE: EVALUATION  -> operator TERM TERM
  */
-void evaluation(){
+AST_NODE* evaluation(){
     // write me
-    write_syntax_tree("EVAL ");
-    operator_t();
-    term();
-    term();
+    AST_NODE* eval = create_ast_node(EVALUATION);
+    eval->childs[0] = operator_t();
+    eval->childs[1] = term();
+    eval->childs[2] = term();
+    return eval;
 }
 
 
@@ -199,7 +241,7 @@ void evaluation(){
 
 void lp_t(){
     if(current_token_type == LP){
-        write_syntax_tree("( ");
+
         open_p++;
         get_next_token();
     }else{
@@ -210,7 +252,7 @@ void lp_t(){
 void rp_t(){
     if(current_token_type == RP){
         open_p--;
-        write_syntax_tree(") ");
+
         get_next_token();
     }else{
         show_parser_error_and_exit(PARSER_ERROR_EXPECTED, line_number, RP, current_token_type);
@@ -220,7 +262,7 @@ void rp_t(){
 void lcb_t(){
     if(current_token_type == LCB){
         open_cb++;
-        write_syntax_tree("{ ");
+
         get_next_token();
     }else{
         show_parser_error_and_exit(PARSER_ERROR_EXPECTED, line_number, LCB, current_token_type);
@@ -230,15 +272,14 @@ void lcb_t(){
 void rcb_t(){
     if(current_token_type == RCB){
         open_cb--;
-        write_syntax_tree("} ");
+
         get_next_token();
     }else{
         show_parser_error_and_exit(PARSER_ERROR_EXPECTED, line_number, RCB, current_token_type);
     }
 }
 
-void operator_t(){
-    write_syntax_tree("op ");
+AST_NODE* operator_t(){
     switch(current_token_type){
     case ADDITION_OPERATOR:
     case MULTIPLICATION_OPERATOR:
@@ -249,83 +290,106 @@ void operator_t(){
     case BEQ_OPERATOR:
     case EQ_OPERATOR:
     case NE_OPERATOR:
-        get_next_token();
+    case ASSIGNMENT_OPERATOR:
         break;
     default:
         show_parser_error_and_exit(PARSER_ERROR_UNEXPECTED, line_number, ADDITION_OPERATOR, current_token_type);
         break;
     }
+    AST_NODE* ast_node = create_ast_node(MAIN_TOKEN);
+    get_next_token();
+    return ast_node;
 }
 
-void identifier_t(){
+AST_NODE* identifier_t(){
     // write me
-    write_syntax_tree("id ");
 
     if(current_token_type == IDENTIFIER){
         // get hash table data
-        HASH_TABLE_DATA hash_table_value = hash_table_get(&data_table, current_token.value_id);
-        char identifier[20];
-        strcpy(identifier, hash_table_value.value);
+        AST_NODE* ast_node = create_ast_node(MAIN_TOKEN);
 
-        I_BST* value_of_id = identifier_bst_get(identifier);
-        strcat(identifier, " ");
-        if(value_of_id != NULL){
-            strcat(identifier, "= ");
-            strcat(identifier, value_of_id->value);
-            strcat(identifier, " ");
-        }
-
-        write_syntax_tree(identifier);
         get_next_token();
-        return;
+        return ast_node;
     }else{
         show_parser_error_and_exit(PARSER_ERROR_EXPECTED, line_number, IDENTIFIER, current_token_type);
     }
+    return NULL;
 }
 
-void var_t(){
-    write_syntax_tree("var ");
-    if(current_token_type == VAR){
+AST_NODE* string_t(){
+    // write me
+
+    if(current_token_type == STRING){
+        // get hash table data
+        AST_NODE* ast_node = create_ast_node(MAIN_TOKEN);
+
         get_next_token();
-        return;
+        return ast_node;
+    }else{
+        show_parser_error_and_exit(PARSER_ERROR_EXPECTED, line_number, STRING, current_token_type);
+    }
+    return NULL;
+}
+
+AST_NODE* var_t(){
+    if(current_token_type == VAR){
+        AST_NODE* ast_node = create_ast_node(MAIN_TOKEN);
+        get_next_token();
+        return ast_node;
     }else{
         show_parser_error_and_exit(PARSER_ERROR_EXPECTED, line_number, VAR, current_token_type);
     }
+    return NULL;
 }
 
-void if_t(){
-    write_syntax_tree("if ");
+AST_NODE* if_t(){
     if(current_token_type == IF){
+        AST_NODE* ast_node = create_ast_node(MAIN_TOKEN);
         get_next_token();
-        return;
+        return ast_node;
     }else{
         show_parser_error_and_exit(PARSER_ERROR_EXPECTED, line_number, IF, current_token_type);
     }
+    return NULL;
 }
 
 
-void when_t(){
-    write_syntax_tree("when ");
+AST_NODE* when_t(){
     if(current_token_type == WHEN){
+        AST_NODE* ast_node = create_ast_node(MAIN_TOKEN);
+
         get_next_token();
-        return;
+
+        return ast_node;
     }else{
         show_parser_error_and_exit(PARSER_ERROR_EXPECTED, line_number, WHEN, current_token_type);
     }
+    return NULL;
 }
 
-void number_t(){
-    write_syntax_tree("num ");
+AST_NODE* number_t(){
     if(current_token_type == NUMBER){
-        // get hash table data
-        HASH_TABLE_DATA hash_table_value = hash_table_get(&data_table, current_token.value_id);
-        char number[20];
-        strcpy(number, hash_table_value.value);
-        strcat(number, " ");
-        write_syntax_tree(number);
+
+        AST_NODE* ast_node = create_ast_node(MAIN_TOKEN);
+
         get_next_token();
-        return;
+
+        return ast_node;
     }else{
         show_parser_error_and_exit(PARSER_ERROR_EXPECTED, line_number, NUMBER, current_token_type);
     }
+
+    return NULL;
+}
+
+AST_NODE* create_ast_node(AST_NODE_TYPE type){
+    AST_NODE* newNode = calloc(1, sizeof(AST_NODE));
+    newNode->node_type = type;
+    if(type == MAIN_TOKEN){
+        newNode->token = current_token;
+    }
+    int i = 0;
+    for(;i<10;i++)
+        newNode->childs[i] = NULL;
+    return newNode;
 }

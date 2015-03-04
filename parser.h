@@ -1,5 +1,6 @@
 #ifndef PARSER_H_INCLUDED
 #define PARSER_H_INCLUDED
+#include "global_things.h"
 
 #define STATE_EXPRESSION 1
 #define STATE_STATEMENT 2
@@ -15,27 +16,27 @@ void parse();
 
 void get_next_token();
 int is_last_token();
-
+AST_NODE* create_ast_node(AST_NODE_TYPE type);
 /*---------------- TERMINALS -------------*/
-void identifier_t();
-void operator_t();
-void number_t();
+AST_NODE* identifier_t();
+AST_NODE* string_t();
+AST_NODE* operator_t();
+AST_NODE* number_t();
 void lp_t();
 void rp_t();
 void lcb_t();
 void rcb_t();
-void var_t();
-void if_t();
-void when_t();
-void assignment_operator_t();
+AST_NODE* var_t();
+AST_NODE* if_t();
+AST_NODE* when_t();
+AST_NODE* assignment_operator_t();
 /*---------------- NON TERMINALS -------------*/
-void expression();
-void expression_prime();
-void statement();
-void evaluation();
-void control_flow();
-void block();
-void term();
-
+AST_NODE* expression();
+AST_NODE* expression_prime();
+AST_NODE* statement();
+AST_NODE* evaluation();
+AST_NODE* control_flow();
+AST_NODE* block();
+AST_NODE* term();
 
 #endif // PARSER_H_INCLUDED

@@ -23,6 +23,7 @@ typedef enum {
     VAR,
     IF,
     WHEN,
+    SHOW,
     LP,
     RP,
     LCB,
@@ -31,5 +32,17 @@ typedef enum {
     NEWLINE
 
 } TOKEN_TYPE;
+
+typedef enum {
+    EXPRESSION,
+    EXPRESSION_PRIME,
+    STATEMENT,
+    TERM,
+    CONTROL_FLOW,
+    EVALUATION,
+    MAIN_TOKEN,
+    BLOCK,
+    SHOW_METHOD
+} AST_NODE_TYPE;
 
 #endif // GRAMMER_H_INCLUDED
