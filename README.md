@@ -15,29 +15,29 @@ lexer.h and lexer.c, those are the files that working for lexical analysis. Also
 
 An Abstract Syntax Tree is getting build after getting token list from lexer. I tried to keep it simple. Grammers that are used for parser are-
 
-EXPRESSION -> STATEMENT EXPRESSION_PRIME
-            | CONTROLFLOW EXPRESSION_PRIME
-            | EPSILON
-
-EXPRESSION' -> STATEMENT '\n' EXPRESSION
-             | CONTROLFLOW '\n' EXPRESSION
-             | EPSILON
-             
-STATEMENT  -> var identifier
-            | = identifier TERM
-            | show TERM
-            
-CONTROLFLOW -> if '(' EVALUATION ')' BLOCK
-             | when '(' EVALUATION ')' BLOCK
-             
-BLOCK -> '{' EXPRESSION_PRIME '}' EXPRESSION_PRIME
-
-TERM  -> identifier
-       | number
-  		 | string
-       | '(' EVALUATION ')'
-       
-EVALUATION  -> operator TERM TERM
+>EXPRESSION -> STATEMENT EXPRESSION_PRIME
+>            | CONTROLFLOW EXPRESSION_PRIME
+>            | EPSILON
+>
+>EXPRESSION' -> STATEMENT '\n' EXPRESSION
+>             | CONTROLFLOW '\n' EXPRESSION
+>             | EPSILON
+>             
+>STATEMENT  -> var identifier
+>            | = identifier TERM
+>            | show TERM
+>            
+>CONTROLFLOW -> if '(' EVALUATION ')' BLOCK
+>             | when '(' EVALUATION ')' BLOCK
+>             
+>BLOCK -> '{' EXPRESSION_PRIME '}' EXPRESSION_PRIME
+>
+>TERM  -> identifier
+>       | number
+>       | string
+>       | '(' EVALUATION ')'
+>       
+>EVALUATION  -> operator TERM TERM
 
 
 As you guessed I tried to implement Polish prefix notation for equations or statements. Because it gave me somewhat relif for operator precedence checking.
