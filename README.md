@@ -43,12 +43,12 @@ An Abstract Syntax Tree is getting build after getting token list from lexer. I 
 As you guessed I tried to implement Polish prefix notation for equations or statements. Because it gave me somewhat relif for operator precedence checking.
 
 So a simple Oboni program looks like this - 
-
+```javascript
 var x
 = x 1
 when(< x 100){
   show x
   = x (+ x 1)
 }
-
+```
 That show is currently just working like a keyword but I will move to functions when I will implement functions in my language.
