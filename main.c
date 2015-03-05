@@ -32,6 +32,7 @@ int main(int argvc, char* argv[])
     remove( syntax_tree_file_name );
     write_token_array();
     parse();
+    free_token_array(&token_array);
     write_syntax_tree(ast_root, 0);
     interpret();
     return 0;

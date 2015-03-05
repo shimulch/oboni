@@ -193,7 +193,7 @@ void tokenizer(){
 
         x++;
     }
-    if(strlen(chunk)> 0){
+    if(strlen(chunk)> 0 && !string_helper){
         add_token_chunk();
     }
 }
@@ -203,9 +203,9 @@ void tokenizer(){
 void add_token(TOKEN_TYPE token_type){
     TOKEN token;
     token.token_id = total_tokens++;
+    token.value = NULL;
     if(token_type == IDENTIFIER || token_type == NUMBER || token_type == STRING){
-        token.value_id = value_id;
-        token.value = malloc(sizeof(token.value));
+        token.value = malloc(sizeof(char[strlen(chunk)]));
         strcpy(token.value, chunk);
 
     }
@@ -246,12 +246,3 @@ void add_token_chunk(){
     strcpy(chunk, "");
 }
 
-
-
-void add_value(TOKEN_TYPE token_type) {
-
-    if(token_type == IDENTIFIER){
-
-    }
-
-}

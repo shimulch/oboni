@@ -47,7 +47,7 @@ void free_token_array(TOKEN_ARRAY *t_array) {
 /*---------- ADD IDENTIFIER IN BST --------------*/
 
 void identifier_bst_add(char* key, char* value){
-    I_BST* newOne = malloc(sizeof(I_BST));
+    I_BST* newOne = calloc(1,sizeof(I_BST));
     strcpy(newOne->key, key);
     strcpy(newOne->value, value);
     newOne->left = NULL;

@@ -117,34 +117,34 @@
 1424859725 e:\compiler\tinylang\writer.h
 	<stdio.h>
 
-1425221284 source:e:\compiler\oboni\error_report.c
+1425539895 source:e:\compiler\oboni\error_report.c
 	<stdio.h>
 	<stdlib.h>
 	"error_report.h"
 
-1425220990 e:\compiler\oboni\error_report.h
+1425539895 e:\compiler\oboni\error_report.h
 	"global_things.h"
 
-1425365559 e:\compiler\oboni\global_things.h
+1425540109 e:\compiler\oboni\global_things.h
 	"grammer.h"
 
-1425393178 e:\compiler\oboni\grammer.h
+1425539895 e:\compiler\oboni\grammer.h
 
-1424797720 source:e:\compiler\oboni\fsm.c
+1425539895 source:e:\compiler\oboni\fsm.c
 	<ctype.h>
 	<string.h>
 	"fsm.h"
 
-1424790484 e:\compiler\oboni\fsm.h
+1425539895 e:\compiler\oboni\fsm.h
 
-1425479359 source:e:\compiler\oboni\global_things.c
+1425540010 source:e:\compiler\oboni\global_things.c
 	<stdlib.h>
 	<ctype.h>
 	<string.h>
 	"global_things.h"
 	"error_report.h"
 
-1425482102 source:e:\compiler\oboni\lexer.c
+1425540602 source:e:\compiler\oboni\lexer.c
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
@@ -154,13 +154,13 @@
 	"global_things.h"
 	"fsm.h"
 
-1425061456 e:\compiler\oboni\lexer.h
+1425540274 e:\compiler\oboni\lexer.h
 	<stdio.h>
 	<stdlib.h>
 	"grammer.h"
 	"global_things.h"
 
-1425481597 source:e:\compiler\oboni\main.c
+1425540316 source:e:\compiler\oboni\main.c
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
@@ -173,14 +173,14 @@
 	"parser.h"
 	"interpreter.h"
 
-1425389782 e:\compiler\oboni\writer.h
+1425539895 e:\compiler\oboni\writer.h
 	"global_things.h"
 	<stdio.h>
 
-1425479548 e:\compiler\oboni\parser.h
+1425539895 e:\compiler\oboni\parser.h
 	"global_things.h"
 
-1425479600 source:e:\compiler\oboni\parser.c
+1425540245 source:e:\compiler\oboni\parser.c
 	"parser.h"
 	"global_things.h"
 	"error_report.h"
@@ -188,7 +188,7 @@
 	<string.h>
 	<stdlib.h>
 
-1425393249 source:e:\compiler\oboni\writer.c
+1425539895 source:e:\compiler\oboni\writer.c
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
@@ -197,7 +197,7 @@
 	"grammer.h"
 	"global_things.h"
 
-1425481439 source:e:\compiler\oboni\interpreter.c
+1425539895 source:e:\compiler\oboni\interpreter.c
 	<string.h>
 	<math.h>
 	<stdlib.h>
@@ -207,7 +207,7 @@
 	"global_things.h"
 	"error_report.h"
 
-1425394893 e:\compiler\oboni\interpreter.h
+1425539895 e:\compiler\oboni\interpreter.h
 	"grammer.h"
 	"global_things.h"
 

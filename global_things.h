@@ -9,8 +9,6 @@
 
 typedef struct  {
     int token_id;
-    int value_id;
-    int endpoint;
     char* value;
     TOKEN_TYPE token_type;
 } TOKEN;

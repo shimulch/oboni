@@ -84,6 +84,7 @@ AST_NODE* expression_prime(){
         line_number++;
         AST_NODE* exp_p = create_ast_node(EXPRESSION_PRIME);
         if(current_token_type == RCB && open_cb > 0){
+            free(exp_p);
             return NULL;
         }
         exp_p->childs[0] = expression();
