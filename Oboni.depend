@@ -211,3 +211,97 @@
 	"grammer.h"
 	"global_things.h"
 
+1431051342 source:f:\side projects\oboni\error_report.c
+	<stdio.h>
+	<stdlib.h>
+	"error_report.h"
+
+1431051342 f:\side projects\oboni\error_report.h
+	"global_things.h"
+
+1431051342 f:\side projects\oboni\global_things.h
+	"grammer.h"
+
+1431051342 f:\side projects\oboni\grammer.h
+
+1431051342 source:f:\side projects\oboni\fsm.c
+	<ctype.h>
+	<string.h>
+	"fsm.h"
+
+1431051342 f:\side projects\oboni\fsm.h
+
+1431051342 source:f:\side projects\oboni\global_things.c
+	<stdlib.h>
+	<ctype.h>
+	<string.h>
+	"global_things.h"
+	"error_report.h"
+
+1431051342 source:f:\side projects\oboni\interpreter.c
+	<string.h>
+	<math.h>
+	<stdlib.h>
+	<ctype.h>
+	<stdio.h>
+	"interpreter.h"
+	"global_things.h"
+	"error_report.h"
+
+1431051342 f:\side projects\oboni\interpreter.h
+	"grammer.h"
+	"global_things.h"
+
+1431051342 source:f:\side projects\oboni\lexer.c
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+	<string.h>
+	"lexer.h"
+	"error_report.h"
+	"global_things.h"
+	"fsm.h"
+
+1431051342 f:\side projects\oboni\lexer.h
+	<stdio.h>
+	<stdlib.h>
+	"grammer.h"
+	"global_things.h"
+
+1431051342 source:f:\side projects\oboni\parser.c
+	"parser.h"
+	"global_things.h"
+	"error_report.h"
+	<ctype.h>
+	<string.h>
+	<stdlib.h>
+
+1431051342 f:\side projects\oboni\parser.h
+	"global_things.h"
+
+1431051342 source:f:\side projects\oboni\writer.c
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+	<string.h>
+	"writer.h"
+	"grammer.h"
+	"global_things.h"
+
+1431051342 f:\side projects\oboni\writer.h
+	"global_things.h"
+	<stdio.h>
+
+1431051874 source:f:\side projects\oboni\main.c
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+	<string.h>
+	"global_things.h"
+	"grammer.h"
+	"error_report.h"
+	"lexer.h"
+	"writer.h"
+	"parser.h"
+	"interpreter.h"
+
